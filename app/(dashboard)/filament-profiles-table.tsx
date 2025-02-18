@@ -20,6 +20,7 @@ import { SelectFilamentProfile } from '@/lib/db';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { addFilamentProfile } from './actions';
 
 export function FilamentProfilesTable({
   filamentProfiles,
