@@ -1,10 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ProductsTable } from './products-table';
-import { getProducts } from '@/lib/db';
+import { FilamentProfilesTable } from './filament-profiles-table';
+import { getFilamentProfiles } from '@/lib/db';
 
-export default async function ProductsPage(
+export default async function FilamentsPage(
   props: {
     searchParams: Promise<{ q: string; offset: string }>;
   }
@@ -12,7 +12,7 @@ export default async function ProductsPage(
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
   const offset = searchParams.offset ?? 0;
-  const { products, newOffset, totalProducts } = await getProducts(
+  const {filamentProfiles, newOffset, totalProfiles} = await getFilamentProfiles(
     search,
     Number(offset)
   );
@@ -22,10 +22,10 @@ export default async function ProductsPage(
       <div className="flex items-center">
         <TabsList>
           <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
-          <TabsTrigger value="draft">Draft</TabsTrigger>
-          <TabsTrigger value="archived" className="hidden sm:flex">
-            Archived
+          <TabsTrigger value="pla">PLA</TabsTrigger>
+          <TabsTrigger value="petg">PETG</TabsTrigger>
+          <TabsTrigger value="abs" className="hidden sm:flex">
+            ABS
           </TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
@@ -38,16 +38,16 @@ export default async function ProductsPage(
           <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Product
+              Add Filament Profile
             </span>
           </Button>
         </div>
       </div>
       <TabsContent value="all">
-        <ProductsTable
-          products={products}
+        <FilamentProfilesTable
+          filamentProfiles={filamentProfiles}
           offset={newOffset ?? 0}
-          totalProducts={totalProducts}
+          totalProfiles={totalProfiles}
         />
       </TabsContent>
     </Tabs>

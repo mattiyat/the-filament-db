@@ -15,23 +15,23 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Product } from './product';
-import { SelectProduct } from '@/lib/db';
+import { FilamentProfile } from './filament-profile';
+import { SelectFilamentProfile } from '@/lib/db';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export function ProductsTable({
-  products,
+export function FilamentProfilesTable({
+  filamentProfiles,
   offset,
-  totalProducts
+  totalFilaments
 }: {
-  products: SelectProduct[];
+  filamentProfiles: SelectFilamentProfile[];
   offset: number;
-  totalProducts: number;
+  totalFilaments: number;
 }) {
   let router = useRouter();
-  let productsPerPage = 5;
+  let filamentsPerPage = 5;
 
   function prevPage() {
     router.back();
@@ -44,24 +44,20 @@ export function ProductsTable({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Products</CardTitle>
+        <CardTitle>Filament Profiles</CardTitle>
         <CardDescription>
-          Manage your products and view their sales performance.
+          Browse and manage filament print profiles.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden w-[100px] sm:table-cell">
-                <span className="sr-only">Image</span>
-              </TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Total Sales
-              </TableHead>
+              <TableHead>Material</TableHead>
+              <TableHead>Brand</TableHead>
+              <TableHead className="hidden md:table-cell">Diameter</TableHead>
+              <TableHead className="hidden md:table-cell">Color</TableHead>
               <TableHead className="hidden md:table-cell">Created at</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -69,8 +65,8 @@ export function ProductsTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <Product key={product.id} product={product} />
+            {filamentProfiles.map((filamentProfile) => (
+              <FilamentProfile key={filamentProfile.filamentProfileId} filamentProfile={filamentProfile} />
             ))}
           </TableBody>
         </Table>
@@ -80,9 +76,9 @@ export function ProductsTable({
           <div className="text-xs text-muted-foreground">
             Showing{' '}
             <strong>
-              {Math.max(0, Math.min(offset - productsPerPage, totalProducts) + 1)}-{offset}
+              {Math.max(0, Math.min(offset - filamentsPerPage, totalFilaments) + 1)}-{offset}
             </strong>{' '}
-            of <strong>{totalProducts}</strong> products
+            of <strong>{totalFilaments}</strong> filaments
           </div>
           <div className="flex">
             <Button
@@ -90,7 +86,7 @@ export function ProductsTable({
               variant="ghost"
               size="sm"
               type="submit"
-              disabled={offset === productsPerPage}
+              disabled={offset === filamentsPerPage}
             >
               <ChevronLeft className="mr-2 h-4 w-4" />
               Prev
@@ -100,7 +96,7 @@ export function ProductsTable({
               variant="ghost"
               size="sm"
               type="submit"
-              disabled={offset + productsPerPage > totalProducts}
+              disabled={offset + filamentsPerPage > totalFilaments}
             >
               Next
               <ChevronRight className="ml-2 h-4 w-4" />
