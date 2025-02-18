@@ -24,11 +24,11 @@ import { Button } from '@/components/ui/button';
 export function FilamentProfilesTable({
   filamentProfiles,
   offset,
-  totalFilaments
+  totalFilamentProfiles
 }: {
   filamentProfiles: SelectFilamentProfile[];
   offset: number;
-  totalFilaments: number;
+  totalFilamentProfiles: number;
 }) {
   let router = useRouter();
   let filamentsPerPage = 5;
@@ -76,9 +76,9 @@ export function FilamentProfilesTable({
           <div className="text-xs text-muted-foreground">
             Showing{' '}
             <strong>
-              {Math.max(0, Math.min(offset - filamentsPerPage, totalFilaments) + 1)}-{offset}
+              {Math.max(0, Math.min(offset - filamentsPerPage, totalFilamentProfiles) + 1)}-{offset}
             </strong>{' '}
-            of <strong>{totalFilaments}</strong> filaments
+            of <strong>{totalFilamentProfiles}</strong> filaments
           </div>
           <div className="flex">
             <Button
@@ -96,7 +96,7 @@ export function FilamentProfilesTable({
               variant="ghost"
               size="sm"
               type="submit"
-              disabled={offset + filamentsPerPage > totalFilaments}
+              disabled={offset + filamentsPerPage > totalFilamentProfiles}
             >
               Next
               <ChevronRight className="ml-2 h-4 w-4" />

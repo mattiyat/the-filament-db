@@ -169,7 +169,7 @@ export async function getFilamentProfiles(
     createdAt: string;
   }[];
   newOffset: number | null;
-  totalProfiles: number;
+  totalFilamentProfiles: number;
 }> {
   const limit = 5;
 
@@ -232,20 +232,93 @@ export async function getFilamentProfiles(
   
 
   // Get total count of profiles
-  const totalProfiles = search
+  const totalFilamentProfiles = search
     ? formattedProfiles.length
     : Number((await db.select({ count: count() }).from(filamentProfiles))[0].count);
 
   return {
     filamentProfiles: formattedProfiles,
     newOffset: offset !== null && formattedProfiles.length >= limit ? offset + limit : null,
-    totalProfiles,
+    totalFilamentProfiles,
   };
+}
+
+export async function addFilamentProfileToDB({
+  userId,
+  filamentId,
+  printerId,
+  filamentProfileName,
+  clonedFromProfileId,
+  slicerSettings = {} // 👈 Slicer settings passed here
+}: {
+  userId: string;
+  filamentId: string;
+  printerId?: string | null;
+  filamentProfileName: string;
+  clonedFromProfileId?: string | null;
+  slicerSettings?: Partial<{
+    sourceSlicer: 'Bambu Studio' | 'PrusaSlicer' | 'Cura' | 'OrcaSlicer' | 'Other';
+    slicerVersion: string;
+    customNotes: string | null;
+    communityRating: number;
+    layerHeight: number;
+    wallThickness: number;
+    topBottomLayers: number;
+    infillDensity: number;
+    infillPattern: 'Grid' | 'Gyroid' | 'Honeycomb' | 'Cubic' | 'Other';
+    nozzleTemp: number;
+    bedTemp: number;
+    chamberTemp: number;
+    printSpeed: number;
+    wallSpeed: number;
+    infillSpeed: number;
+    travelSpeed: number;
+    flowRate: number;
+    fanSpeed: number;
+    minLayerTime: number;
+    retractionDistance: number;
+    retractionSpeed: number;
+    zHop: number;
+    supportsEnabled: boolean;
+    supportType: 'Tree' | 'Grid' | 'None';
+    supportDensity: number;
+    supportZDistance: number;
+    gcodeLink: string;
+    profileLink: string;
+    tags: string[];
+  }>;
+}) {
+  try {
+    // ✅ Extract only valid columns that exist in the filamentProfiles schema
+    const validSlicerSettings = Object.fromEntries(
+      Object.entries(slicerSettings).filter(([key]) =>
+        Object.keys(filamentProfiles).includes(key)
+      )
+    );
+
+    const [newFilamentProfile] = await db
+      .insert(filamentProfiles)
+      .values({
+        userId,
+        filamentId,
+        printerId: printerId ?? null,
+        filamentProfileName,
+        clonedFromProfileId: clonedFromProfileId ?? null,
+        ...validSlicerSettings, // ✅ Ensures only valid keys are inserted
+      })
+      .returning();
+
+    return newFilamentProfile;
+  } catch (error) {
+    console.error('Error adding filament profile:', error);
+    throw new Error('Failed to add filament profile');
+  }
 }
 
 
 
 
-export async function deletePrintProfileById(id: string) {
+
+export async function deleteFilamentProfileById(id: string) {
   await db.delete(filaments).where(eq(filaments.filamentId, id));
 }

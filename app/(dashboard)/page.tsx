@@ -12,7 +12,7 @@ export default async function FilamentsPage(
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
   const offset = searchParams.offset ?? 0;
-  const {filamentProfiles, newOffset, totalProfiles} = await getFilamentProfiles(
+  const {filamentProfiles, newOffset, totalFilamentProfiles} = await getFilamentProfiles(
     search,
     Number(offset)
   );
@@ -47,7 +47,7 @@ export default async function FilamentsPage(
         <FilamentProfilesTable
           filamentProfiles={filamentProfiles}
           offset={newOffset ?? 0}
-          totalProfiles={totalProfiles}
+          totalFilamentProfiles={totalFilamentProfiles}
         />
       </TabsContent>
     </Tabs>
