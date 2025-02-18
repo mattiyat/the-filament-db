@@ -101,4 +101,3 @@ export async function deleteFilamentProfile(formData: FormData) {
   await deleteFilamentProfileById(filamentProfileId);
   revalidatePath('/');
 }
-
