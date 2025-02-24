@@ -5,7 +5,7 @@ import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilamentProfilesTable } from './filament-profiles-table';
 import { getFilamentProfiles } from '@/lib/db';
-import { AddFilamentProfileDialog } from '@/components/add-filament-profile-dialog';
+import { AddFilamentProfileDialog } from '@/app/(dashboard)/add-filament-profile-dialog';
 
 export default async function FilamentsPage(
   props: {
